@@ -1,0 +1,398 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>首页</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="title">-->
+<!--    <h1>MainPage</h1>-->
+<!--</div>-->
+<!--<div>-->
+<!--    <table>-->
+<!--        <tr>-->
+<!--            <th>菜品图片</th>-->
+<!--            <th>菜品名</th>-->
+<!--            <th>价格</th>-->
+<!--            <th>菜品简介</th>-->
+<!--        </tr>-->
+<!--        <tr th:each="foodList:${foodList}">-->
+<!--            <td th:text="${foodList.img}"></td>-->
+<!--            <td th:text="${foodList.name}"></td>-->
+<!--            <td th:text="${foodList.price}"></td>-->
+<!--            <td th:text="${foodList.description}"></td>-->
+<!--        </tr>-->
+<!--    </table>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>美味厨房 | 首页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f5f0;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            background-image: linear-gradient(to bottom, rgba(249, 245, 240, 0.9), rgba(249, 245, 240, 0.9)),
+            url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* 标题样式 */
+        .title {
+            text-align: center;
+            padding: 40px 0 30px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .title h1 {
+            font-size: 3.2rem;
+            color: #d35400;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 1px;
+        }
+
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 4px;
+            background: linear-gradient(to right, #e67e22, #d35400);
+            border-radius: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 菜品表格样式 */
+        .menu-container {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        thead {
+            background: linear-gradient(to right, #e67e22, #d35400);
+            color: white;
+        }
+
+        th {
+            padding: 20px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        th i {
+            margin-right: 8px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #f1f1f1;
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #fff9f2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        td {
+            padding: 20px 15px;
+            vertical-align: middle;
+        }
+
+        /* 菜品图片单元格样式 */
+        .img-cell {
+            width: 120px;
+        }
+
+        /* 菜品名称单元格样式 */
+        .name-cell {
+            min-width: 180px;
+        }
+
+        /* 价格单元格样式 */
+        .price-cell {
+            min-width: 100px;
+        }
+
+        /* 菜品图片样式 */
+        .food-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .food-img:hover {
+            transform: scale(1.05);
+        }
+
+        /* 菜品名称样式 */
+        .food-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        /* 价格样式 */
+        .price {
+            color: #d35400;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .price::before {
+            content: '¥ ';
+            font-size: 1rem;
+        }
+
+        /* 菜品简介样式 */
+        .description {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            max-width: 400px;
+        }
+
+        /* 默认图片样式 */
+        .default-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .title h1 {
+                font-size: 2.5rem;
+            }
+
+            th, td {
+                padding: 15px 10px;
+            }
+
+            .food-img, .default-img {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .title h1 {
+                font-size: 2rem;
+            }
+
+            .title {
+                padding: 25px 0 20px;
+            }
+        }
+
+        /* 页脚样式 */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+        }
+
+        .footer i {
+            color: #e74c3c;
+        }
+
+        /* 无数据提示 */
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95a5a6;
+            font-size: 1.2rem;
+        }
+
+        .no-data i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+            color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="title">
+        <h1>美味厨房</h1>
+        <p class="subtitle">精选新鲜食材，用心烹制每一道菜品，为您带来舌尖上的享受</p>
+    </div>
+
+    <div class="menu-container">
+        <table>
+            <thead>
+            <tr>
+                <th class="img-cell"><i class="fas fa-image"></i>菜品图片</th>
+                <th class="name-cell"><i class="fas fa-utensils"></i>菜品名</th>
+                <th class="price-cell"><i class="fas fa-tag"></i>价格</th>
+                <th><i class="fas fa-info-circle"></i>菜品简介</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 使用Thymeleaf语法遍历菜品列表 -->
+            <!-- 如果foodList为空 -->
+            <tr th:if="${#lists.isEmpty(foodList)}">
+                <td colspan="4">
+                    <div class="no-data">
+                        <i class="fas fa-utensils"></i>
+                        <p>暂无菜品数据，请稍后再来</p>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- 如果foodList不为空 -->
+            <tr th:each="food : ${foodList}">
+                <td class="img-cell">
+                    <!-- 使用foodImageStr属性（驼峰命名法） -->
+                    <img th:if="${food.foodImageStr != null and food.foodImageStr != ''}"
+                         th:src="${food.foodImageStr}"
+                         th:alt="${food.name}"
+                         class="food-img">
+                    <div th:unless="${food.foodImageStr != null and food.foodImageStr != ''}"
+                         class="default-img">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                </td>
+                <td class="name-cell">
+                    <div class="food-name" th:text="${food.name}">菜品名</div>
+                </td>
+                <td class="price-cell">
+                    <div class="price" th:text="${food.price}">价格</div>
+                </td>
+                <td>
+                    <div class="description" th:text="${food.description}">菜品简介</div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        <p>美味厨房 &copy; 2023 | 用心烹制每一餐 <i class="fas fa-heart"></i></p>
+        <p>营业时间: 10:00 AM - 10:00 PM | 订餐电话: 400-123-4567</p>
+    </div>
+</div>
+
+<script>
+    // 添加交互效果
+    document.addEventListener('DOMContentLoaded', function() {
+        // 为每一行添加点击效果
+        const tableRows = document.querySelectorAll('tbody tr');
+
+        tableRows.forEach(row => {
+            row.addEventListener('click', function() {
+                // 如果这一行是"无数据"行，则不处理
+                if (this.querySelector('.no-data')) return;
+
+                // 移除其他行的选中状态
+                tableRows.forEach(r => r.classList.remove('selected'));
+                // 添加当前行的选中状态
+                this.classList.add('selected');
+            });
+        });
+
+        // 添加键盘导航支持
+        document.addEventListener('keydown', function(e) {
+            const selectedRow = document.querySelector('tbody tr.selected');
+            if (!selectedRow) return;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                const nextRow = selectedRow.nextElementSibling;
+                if (nextRow && !nextRow.querySelector('.no-data')) {
+                    selectedRow.classList.remove('selected');
+                    nextRow.classList.add('selected');
+                    nextRow.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                const prevRow = selectedRow.previousElementSibling;
+                if (prevRow && !prevRow.querySelector('.no-data')) {
+                    selectedRow.classList.remove('selected');
+                    prevRow.classList.add('selected');
+                    prevRow.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+                }
+            }
+        });
+
+        // 初始化样式
+        const style = document.createElement('style');
+        style.textContent = `
+                tbody tr.selected {
+                    background-color: #fff0e6 !important;
+                    border-left: 4px solid #e67e22;
+                    box-shadow: 0 5px 15px rgba(230, 126, 34, 0.1) !important;
+                }
+            `;
+        document.head.appendChild(style);
+    });
+</script>
+</body>
+</html>
