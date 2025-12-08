@@ -20,6 +20,7 @@ public class FoodData {
     private String description;
 
     public FoodData() {
+
     }
 
     public FoodData(int id, String foodImageStr, String name, double price, String description) {
