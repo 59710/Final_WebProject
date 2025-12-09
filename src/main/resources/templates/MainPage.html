@@ -44,7 +44,7 @@
                 <td class="img-cell">
                     <!-- 使用foodImageStr属性（驼峰命名法） -->
                     <img th:if="${food.foodImageStr != null and food.foodImageStr != ''}"
-                         th:src="${food.foodImageStr}"
+                         th:src="@{|/images/${food.foodImageStr}|}"
                          th:alt="${food.name}"
                          class="food-img">
                     <div th:unless="${food.foodImageStr != null and food.foodImageStr != ''}"
