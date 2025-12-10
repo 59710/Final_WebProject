@@ -12,7 +12,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     private UserRoleRepository userRoleRepository;
 
     @Override
-    public UserRole find(int id) {
+    public UserRole findByRoleId(int id) {
         return userRoleRepository.findById(id).orElse(null);
     }
 }

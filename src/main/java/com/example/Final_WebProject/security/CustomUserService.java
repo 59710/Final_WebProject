@@ -45,7 +45,7 @@ public class CustomUserService implements UserDetailsService {
         if(userRoleRelList != null && !userRoleRelList.isEmpty()) {
             for (UserRoleRel userRoleRel : userRoleRelList) {
                 //获取用户所有关联角色
-                UserRole userRole = userRoleService.find(userRoleRel.getRoleId());
+                UserRole userRole = userRoleService.findByRoleId(userRoleRel.getRoleId());
                 authorityList.add(new SimpleGrantedAuthority(userRole.getRoleName()));
             }
         }

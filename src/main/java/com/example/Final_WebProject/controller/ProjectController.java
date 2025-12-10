@@ -4,7 +4,11 @@ package com.example.Final_WebProject.controller;
 import com.example.Final_WebProject.email.SendSubscribeEmail;
 import com.example.Final_WebProject.entity.FoodData;
 import com.example.Final_WebProject.entity.UserData;
+import com.example.Final_WebProject.entity.UserRole;
+import com.example.Final_WebProject.entity.UserRoleRel;
 import com.example.Final_WebProject.service.FoodService;
+import com.example.Final_WebProject.service.UserRoleRelService;
+import com.example.Final_WebProject.service.UserRoleService;
 import com.example.Final_WebProject.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpSession;
@@ -17,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,6 +30,13 @@ public class ProjectController {
 
     @Autowired
     private UserService userService;
+
+    @Resource
+    private FoodService foodService;
+    @Resource
+    private UserRoleRelService userRoleRelService;
+    @Resource
+    private UserRoleService userRoleService;
 
     @Autowired
     private SendSubscribeEmail sendSubscribeEmail;
@@ -56,11 +68,26 @@ public class ProjectController {
                         Model model) {
         Optional<UserData> user = userService.login(username, password);
 
+
         if (user.isPresent()) {
             // 登录成功，保存用户信息到session
             session.setAttribute("user", user.get());
+            List<UserRoleRel> userRoleRelList = userRoleRelService.findByUserId(user.get().getId());
+            if(userRoleRelList != null && !userRoleRelList.isEmpty()) {
+                for (UserRoleRel userRoleRel : userRoleRelList) {
+                    if (userRoleService.findByRoleId(userRoleRel.getRoleId()).getRoleName()==null){
+                        System.out.println("用户权限为空！");
+                    }
+                    else {
+                        System.out.println(user.get().getUsername()+"的权限为:");
+                        System.out.println(userRoleService.findByRoleId(userRoleRel.getRoleId()).getRoleName());
+                    }
+                }
+            }
+            logger.info("{}已登录", user.get().getUsername());
             return "redirect:/home";
-        } else {
+        }
+        else {
             model.addAttribute("error", "用户名或密码错误");
             return "login";
         }
@@ -96,8 +123,7 @@ public class ProjectController {
     }
 
     // 主页
-    @Resource
-    private FoodService foodService;
+
     @GetMapping("/home")
     public String home(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         UserData user = (UserData) session.getAttribute("user");

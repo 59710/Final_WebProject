@@ -8,14 +8,14 @@ import jakarta.persistence.Table;
 @Table(name = "user_role")
 public class UserRole {
     @Id
-    private String roleId;
+    private int roleId;
     private String roleName;
 
-    public String getRoleId() {
+    public int getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(String roleId) {
+    public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
 
