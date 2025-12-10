@@ -37,6 +37,12 @@ public class ProjectController {
         return "redirect:/login";
     }
 
+    @GetMapping("/login-page")
+    public String loginPage() {
+        // 应该直接返回视图名，不是重定向
+        return "login";
+    }
+
     @GetMapping("/login")
     public String showLoginForm() {
         return "login";

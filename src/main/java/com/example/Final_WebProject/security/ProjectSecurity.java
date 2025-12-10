@@ -12,12 +12,11 @@ public class ProjectSecurity {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**")
-                )
+                .csrf(csrf -> csrf.disable())
+
                 .formLogin(formLogin -> formLogin
-                        .loginPage("/login")
-                        .failureUrl("/login?error")
+                        .loginPage("/login-page")
+                        .failureUrl("//login-page")
                         .defaultSuccessUrl("/home")
                         .usernameParameter("username")
                         .passwordParameter("password")
@@ -31,10 +30,11 @@ public class ProjectSecurity {
                         .permitAll()
                 )
                 .authorizeHttpRequests( auth -> auth
-                        .requestMatchers("/", "/login", "/register").permitAll()
-                        .requestMatchers("/home").permitAll()
-                        .requestMatchers("/api/**").permitAll()
-                        .anyRequest().authenticated()
+//                        .requestMatchers("/css/**", "/js/**", "/img/**", "/fonts/**").permitAll()
+//                        .requestMatchers("/", "/login", "/register").permitAll()
+//                        .requestMatchers("/home").permitAll()
+//                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 );
         return http.build();
     }
