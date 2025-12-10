@@ -5,7 +5,7 @@
             <PatternLayout pattern = "[%d{HH:mm:ss:SSS}] [%p] -  %l - %m%n"/>
         </Console>
     </Appenders>
-    <Loggers>
+    <Loggers name = "org.apache.logging.log4j">
         <Logger />
         <Root level = "all">
             <AppenderRef ref = "Console"/>

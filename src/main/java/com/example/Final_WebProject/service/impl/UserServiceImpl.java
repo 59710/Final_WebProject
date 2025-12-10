@@ -24,15 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserData findByUsername(String username) {
-        List<UserData> userData = findAll();
-        for (UserData user : userData) {
-            if (user.getUsername().equals(username)) {
-                return user;
-            }
-        }
-        return null;
-    }
 
+        return userRepository.findByUsername(username);
+    }
     @Override
     public List<UserData> findAll() {
         List<UserData> userDataList = userRepository.findAll();
