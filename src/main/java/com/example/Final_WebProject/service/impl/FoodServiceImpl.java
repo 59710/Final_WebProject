@@ -37,4 +37,9 @@ public class FoodServiceImpl implements FoodService {
     public FoodData findByName(String name) {
         return foodRepository.findByName(name);
     }
+
+    @Override
+    public List<FoodData> searchByName(String keyword) {
+        return foodRepository.searchByName(keyword);
+    }
 }

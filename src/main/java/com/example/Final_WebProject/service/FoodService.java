@@ -10,4 +10,5 @@ public interface FoodService {
     FoodData findByName(String name);
     FoodData save(FoodData foodData);
     void deleteById(int id);
+    List<FoodData> searchByName(String keyword);
 }

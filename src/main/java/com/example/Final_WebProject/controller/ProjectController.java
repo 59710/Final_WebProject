@@ -180,4 +180,30 @@ public class ProjectController {
     public String failed(Model model) {
         return "Failed";
     }
+
+    @GetMapping("/search")
+    public String searchFood(@RequestParam(value = "keyword", required = false) String keyword,
+                             HttpSession session,
+                             Model model) {
+        UserData user = (UserData) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        List<FoodData> foodList;
+
+        if (keyword == null || keyword.trim().isEmpty()) {
+            // 如果没有关键词，显示所有菜品
+            foodList = foodService.findAll();
+            model.addAttribute("message", "所有菜品");
+        } else {
+            // 执行搜索
+            foodList = foodService.searchByName(keyword.trim());
+            model.addAttribute("keyword", keyword);
+            model.addAttribute("message", "搜索结果: " + keyword);
+        }
+
+        model.addAttribute("foodList", foodList);
+        return "SearchPage"; // 创建一个简单的搜索结果页面
+    }
 }
